@@ -6,7 +6,7 @@
 #define thermistorPin A0
 #define SerialRate 9600 //the same as in the python code
 #define operationModePID DIRECT
-#define threshold //@TODO choose threshold
+#define threshold 10// threshold set to 10 degrees celsius
 int portFan = 3;
 int portRPM = 2;
 int portLED = 13;
@@ -30,7 +30,7 @@ void counter(){
   counts++;
 }
 
-float fTemperature(int Voltage)
+float functionTemperature(int Voltage)
 {
     R = R0 * (1023/(float)Voltage - 1);
     int local_Temperature = 1.0/((log(R/R0)/constB) + (1.0/T0)) - 273.15;
@@ -46,7 +46,7 @@ void setup() {
 
   Setpoint = 30; //initialise the setpoint in degrees celsius
   int initVoltage = analogRead(thermistorPin);
-  Temperature = fTemperature(initVoltage);
+  Temperature = functionTemperature(initVoltage);
   
   myPID.SetMode(AUTOMATIC);
 }
@@ -60,7 +60,7 @@ void loop(){
     rpm = int(counts*2.*60./2.);
 
     V0 = analogRead(thermistorPin);
-    Temperature = fTemperature(V0);
+    Temperature = functionTemperature(V0);
     
     float gap = abs(Temperature - Setpoint);
     if(gap < threshold)

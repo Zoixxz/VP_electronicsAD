@@ -19,8 +19,8 @@ float R;
 float Temperature;
 float R0 = 100000.0;
 float constB =  -4600;
-float cKp = , cKi = , cKd = ; //@TODO define the conservative parameters
-float aKp = , aKi = , aKd = ;//@TODO define the aggressive parameters
+float cKp = 1, cKi = 0.05, cKd = 0.25;  //@TODO define the conservative parameters
+float aKp = 4, aKi = 0.2, aKd = 1;      //@TODO define the aggressive parameters
 float Setpoint, Input, Output;
 boolean newData = false;
 

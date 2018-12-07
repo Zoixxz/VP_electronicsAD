@@ -25,19 +25,22 @@ void counter(){
 
 
 void setup() {
+  
   pinMode(portled, OUTPUT);
   pinMode(portfan, OUTPUT);
   pinMode(portrpm, INPUT);
   Serial.begin(SerialRate);
   attachInterrupt(digitalPinToInterrupt(portrpm),counter, RISING); //runs function counter as soon signal is rising
+
 }
 void loop(){
-    
+   
     analogWrite(portfan, spd);
     counts = 0;
     sei(); //enable interrupts
-    delay(500);
+    delay(500);  
     cli(); //disable interrups
+   
     rpm = int(counts*2.*60./2.);
 
     V0 = analogRead(thermistorPin);
@@ -47,11 +50,11 @@ void loop(){
       spd = 255;
     else
       spd = 0;
-     
+    if(Serial.available() > 0)
+    {
     Serial.println(millis());
     Serial.println(V0);
     Serial.println(rpm);
     Serial.println(Temperature);
-
-    
+    }
 }

@@ -1,8 +1,7 @@
-   //TODO
-const int LED_two = 8;         //TODO
+const int LED_two = 8;         
 const long blink_intervall1 = 500; //in milliseconds
 const long blink_intervall2 = 250; //in milliseconds
-unsigned long last_time_1 = 0;
+unsigned long last_time_1 = 0; 
 unsigned long last_time_2 = 0;
 
 void setup() {
@@ -10,7 +9,6 @@ void setup() {
   pinMode(LED_two, OUTPUT);
 
 }
-
 void loop() {
     unsigned long current_time_1 = millis();
     if(current_time_1 - last_time_1 >= blink_intervall1)
@@ -23,7 +21,7 @@ void loop() {
           {
             digitalWrite(LED_BUILTIN, LOW);
           }
-          last_time_1 = current_time_1;
+          last_time_1 = current_time_1; //set the last time to the new time if the state of the led was changed
       }
       else
       {

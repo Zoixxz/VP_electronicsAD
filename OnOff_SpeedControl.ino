@@ -1,9 +1,14 @@
 
 //secelct choosen pins for readout
 #include <math.h>
-int portfan = 3;
+
+#define thermistorPin A0
+#define SerialRate 9600 //the same as in the python code
+
+int portfan = 3; //ports 
 int portrpm = 2;
 int portled = 13;
+
 int counts = 0;
 int rpm;
 int spd = 100;
@@ -11,11 +16,8 @@ int V0; //Voltage measured at the thermistor
 float T0 = 298.15; // initial temperature
 float R;
 float Temperature;
-#define SerialRate 9600 //the same as in the python shell
 float R0 = 100000.0;
-#define thermistorPin A0
 float constB =  -4600;
-
 
 boolean newData = false;
 
@@ -38,10 +40,10 @@ void loop(){
     analogWrite(portfan, spd);
     counts = 0;
     sei(); //enable interrupts
-    delay(500);  
+    delay(500);  //500 ms is the time of the measurement for the fan speed
     cli(); //disable interrups
    
-    rpm = int(counts*2.*60./2.);
+    rpm = int(counts*2.*60./2.); //conversion to rpm 
 
     V0 = analogRead(thermistorPin);
     R = R0 * (1023/(float)V0 - 1);

@@ -4,7 +4,7 @@
 
 rgb_lcd lcd;
 
-const int colorR = 200;
+const int colorR = 200; //this results in bright white
 const int colorG = 200;
 const int colorB = 200;
 

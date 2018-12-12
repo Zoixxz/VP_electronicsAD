@@ -4,25 +4,26 @@
 #include <PID_v1.h> // PID library
 
 #define thermistorPin A0
-#define SerialRate 9600 //the same as in the python code DIRECT
-#define threshold 10// threshold set to 10 degrees celsius
-int portFan = 3;
+#define SerialRate 9600 //the same as in the python code
+
+int portFan = 3; //configure the ports
 int portRPM = 2;
 int portLED = 13;
+
 int counts = 0;
 int rpm;
 double fanSpeed = 100;
 int V0; //Voltage measured at the thermistor
-float T0 = 298.15; // initial temperature
+float T0 = 298.15; // configuration temperature of the thermistor
 float R;
 double Temperature;
 float R0 = 100000.0;
 float constB =  -4600;
-double cKp = 200, cKi = 100, cKd = 150;  //@TODO define the conservative parameters//@TODO define the aggressive parameters
+double cKp = 200, cKi = 100, cKd = 150;  //the parameters of the PID algorithm
 double Setpoint, Input, Output;
 boolean newData = false;
 
-PID myPID(&Temperature, &fanSpeed, &Setpoint, cKp, cKi, cKd, REVERSE); //set up PID @TODO:direct or indirect?
+PID myPID(&Temperature, &fanSpeed, &Setpoint, cKp, cKi, cKd, REVERSE); //PID is set to reverse as it is used for cooling
 
 void counter(){
   counts++;
@@ -42,7 +43,7 @@ void setup() {
   Serial.begin(SerialRate);
   attachInterrupt(digitalPinToInterrupt(portRPM), counter, RISING); //runs function counter as soon signal is rising
 
-  Setpoint = 25; //initialise the setpoint in degrees celsius
+  Setpoint = 25; //initialise the setpoint in [°C]
   int initVoltage = analogRead(thermistorPin);
   Temperature = functionTemperature(initVoltage);
   
@@ -58,19 +59,17 @@ void loop(){
     cli(); //disable interrupt
     
     rpm = int(counts*2.*60./2.);
+  
     V0 = analogRead(thermistorPin);
     Temperature = functionTemperature(V0);
     
-    myPID.SetTunings(cKp, cKi, cKd); //conservative tuning parameters
+    myPID.SetTunings(cKp, cKi, cKd); 
 
     myPID.Compute();
     
-  
-    Serial.println(42);
+    Serial.println(42); //used in to encode the signal start
     Serial.println(millis());
     Serial.println(V0);
     Serial.println(rpm);
     Serial.println(Temperature);
-
-    
 }

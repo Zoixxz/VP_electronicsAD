@@ -48,15 +48,15 @@ void loop(){
     V0 = analogRead(thermistorPin);
     R = R0 * (1023/(float)V0 - 1);
     Temperature = 1.0/((log(R/R0)/constB) + (1.0/T0)) - 273.15;
-    if(Temperature>26.0)
+    if(Temperature>25.0)
       spd = 255;
     else
       spd = 0;
-    if(Serial.available() > 0)
-    {
+
+    Serial.println(42);
     Serial.println(millis());
     Serial.println(V0);
     Serial.println(rpm);
     Serial.println(Temperature);
-    }
+
 }
